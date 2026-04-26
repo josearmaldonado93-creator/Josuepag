@@ -24,7 +24,7 @@
                 <li><a href="#perfil">Perfil</a></li>
                 <li><a href="#recursos">Recursos</a></li>
                 <li><a href="#ubicacion">Ubicación</a></li>
-                <li><a href="#contacto" class="btn-primary">Agendar Cita</a></li>
+                <li><a href="#agendar" class="btn-primary">Agendar Cita</a></li>
             </ul>
             <button class="mobile-menu-btn" aria-label="Menú">
                 <i data-lucide="menu" style="width:24px;height:24px;"></i>
@@ -41,9 +41,9 @@
                 Detrás del malestar, la ira y el sufrimiento suele haber una historia. Juntos podemos comprenderla para avanzar y sanar.
             </p>
             <div class="hero-cta">
-                <a href="https://wa.me/593987542217" target="_blank" class="btn-primary">
+                <a href="#agendar" class="btn-primary">
                     <i data-lucide="calendar" style="width:18px;height:18px;"></i>
-                    Agenda tu consulta
+                    Agendar cita
                 </a>
                 <a href="#servicios" class="btn-primary btn-outline">Conoce mi enfoque</a>
             </div>
@@ -85,6 +85,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- Resources Section -->
     <section id="recursos" class="section" style="background: rgba(158, 185, 173, 0.1);">
@@ -328,6 +329,28 @@
                 <i data-lucide="message-circle" style="width:20px;height:20px;"></i>
                 Escribir por WhatsApp
             </a>
+        </div>
+    </section>
+
+    <!-- Appointment Section (Google Calendar) -->
+    <section id="agendar" class="section agenda-section">
+        <div class="section-header">
+            <h2>Agendar cita</h2>
+            <p>Elige el día y la hora que mejor se adapte a tu disponibilidad. Recibirás una confirmación inmediata en tu correo.</p>
+        </div>
+        <div class="calendar-container">
+            <!-- Instrucciones para Josué: Reemplaza el src de abajo con tu enlace de Google Calendar -->
+            <iframe 
+                src="https://calendar.app.google/u8Hcn9ELe2SVJyDx6" 
+                style="border: 0" 
+                width="100%" 
+                height="700" 
+                frameborder="0" 
+                scrolling="no">
+            </iframe>
+        </div>
+        <div class="agenda-help">
+            <p>¿Prefieres agendar de forma personal o tienes dudas? <a href="https://wa.me/593987542217" target="_blank">Escríbeme por WhatsApp</a></p>
         </div>
     </section>
 
