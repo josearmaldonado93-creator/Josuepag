@@ -76,8 +76,9 @@ nav {
 }
 
 .logo img {
-    height: 50px;
+    height: 260px;
     width: auto;
+    margin: -90px 0;
     object-fit: contain;
     /* Filtrar a color Navy (#2d4554) si el logo es blanco */
     filter: brightness(0) saturate(100%) invert(18%) sepia(21%) saturate(1518%) hue-rotate(160deg) brightness(101%) contrast(92%);
