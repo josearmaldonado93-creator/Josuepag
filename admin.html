@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel Admin — Josué Berrú</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -167,30 +166,13 @@
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" data-tab="stats">📊 Estadísticas</button>
-    <button class="tab-btn" data-tab="fotos">🖼 Fotos del sitio</button>
+    <button class="tab-btn active" data-tab="fotos">🖼 Fotos del sitio</button>
     <button class="tab-btn" data-tab="recursos">📋 Sección Recursos</button>
     <button class="tab-btn" data-tab="contacto">📞 Contacto</button>
   </div>
 
-  <!-- ── ESTADÍSTICAS ── -->
-  <div class="tab-panel active" id="tab-stats">
-    <div class="panel-title">Estadísticas de visitas</div>
-    <div class="panel-hint">Aquí puedes ver cuántas personas visitan tu sitio web.</div>
-    <div class="stat-grid">
-      <div class="stat-box"><div class="lbl">Total visitas</div><div class="val" id="s-total">—</div><div class="sub">Desde el inicio</div></div>
-      <div class="stat-box"><div class="lbl">Hoy</div><div class="val" id="s-today">—</div><div class="sub" id="s-today-date">—</div></div>
-      <div class="stat-box"><div class="lbl">Esta semana</div><div class="val" id="s-week">—</div><div class="sub">Últimos 7 días</div></div>
-      <div class="stat-box"><div class="lbl">Este mes</div><div class="val" id="s-month">—</div><div class="sub">Últimos 30 días</div></div>
-    </div>
-    <div class="chart-box">
-      <h3>Visitas diarias — últimos 30 días</h3>
-      <div class="chart-wrap"><canvas id="visits-chart"></canvas></div>
-    </div>
-  </div>
-
   <!-- ── FOTOS DEL SITIO ── -->
-  <div class="tab-panel" id="tab-fotos">
+  <div class="tab-panel active" id="tab-fotos">
     <div class="panel-title">Fotos del sitio</div>
     <div class="panel-hint">Haz clic en "Cambiar foto" para actualizar cualquier imagen. La foto nueva aparecerá en el sitio inmediatamente.</div>
     <div class="photo-section" id="photo-section">
@@ -253,7 +235,6 @@
 <script>
 // ── UTILIDADES ──────────────────────────────────────────────────────
 const $ = id => document.getElementById(id)
-let visitChart = null
 let resCards = []
 
 async function api(method, path, body) {
@@ -301,40 +282,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   })
 })
 
-function loadAll() { loadStats(); loadFotos(); loadRecursos(); loadContacto() }
-
-// ── ESTADÍSTICAS ─────────────────────────────────────────────────────
-async function loadStats() {
-  try {
-    const d = await api('GET', '/api/admin/stats')
-    const daily = d.daily || {}, today = new Date().toISOString().split('T')[0]
-    $('s-total').textContent = (d.total || 0).toLocaleString()
-    $('s-today').textContent = (daily[today] || 0).toLocaleString()
-    $('s-today-date').textContent = today
-    const days30 = last30()
-    $('s-week').textContent  = days30.slice(-7).reduce((s, d) => s + (daily[d] || 0), 0).toLocaleString()
-    $('s-month').textContent = days30.reduce((s, d) => s + (daily[d] || 0), 0).toLocaleString()
-    renderChart(days30, daily)
-  } catch(ex) { console.error('Stats error:', ex) }
-}
-
-function last30() {
-  return Array.from({ length: 30 }, (_, i) => {
-    const d = new Date(); d.setDate(d.getDate() - (29 - i))
-    return d.toISOString().split('T')[0]
-  })
-}
-
-function renderChart(days, daily) {
-  const labels = days.map(d => { const [,m,dd] = d.split('-'); return `${dd}/${m}` })
-  const vals = days.map(d => daily[d] || 0)
-  if (visitChart) visitChart.destroy()
-  visitChart = new Chart($('visits-chart'), {
-    type: 'bar',
-    data: { labels, datasets: [{ label: 'Visitas', data: vals, backgroundColor: 'rgba(45,69,84,.75)', borderColor: '#2d4554', borderWidth: 1, borderRadius: 5 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } }, x: { grid: { display: false } } } }
-  })
-}
+function loadAll() { loadFotos(); loadRecursos(); loadContacto() }
 
 // ── FOTOS DEL SITIO ──────────────────────────────────────────────────
 async function loadFotos() {
