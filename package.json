@@ -1,12 +1,17 @@
 {
   "name": "pagina-josue",
-  "version": "0.0.0",
+  "version": "0.0.02",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^4.19.2",
+    "multer": "^2.1.1"
   },
   "devDependencies": {
     "vite": "^8.0.9"

@@ -18,6 +18,10 @@ __MACOSX/
 *.zip
 *.mp4
 
+# Datos locales (en Railway se guardan en el Volume)
+data/
+uploads/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

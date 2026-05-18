@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin — Josué Berrú</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #2d4554; --navy-d: #1e2e38; --terra: #c2705f;
+      --bg: #f5f4f2; --white: #fff; --text: #2c2c2c; --muted: #6b7280;
+      --border: #e5e7eb; --ok: #16a34a; --err: #dc2626; --r: 14px;
+    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--navy), var(--navy-d)); }
+    .login-card { background: var(--white); border-radius: 22px; padding: 3rem 2.5rem; width: 100%; max-width: 400px; box-shadow: 0 25px 60px rgba(0,0,0,.35); text-align: center; }
+    .login-brand { font-size: .8rem; font-weight: 700; color: var(--terra); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; }
+    .login-card h1 { font-size: 1.8rem; color: var(--navy); margin-bottom: .4rem; }
+    .login-card > p { color: var(--muted); font-size: .9rem; margin-bottom: 2rem; }
+    .inp { width: 100%; padding: .85rem 1rem; border: 2px solid var(--border); border-radius: 10px; font-size: 1rem; outline: none; transition: border-color .2s; font-family: inherit; }
+    .inp:focus { border-color: var(--navy); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .8rem 1.6rem; border: none; border-radius: 50px; font-size: .95rem; font-weight: 600; cursor: pointer; transition: all .2s; font-family: inherit; }
+    .btn-navy { background: var(--navy); color: #fff; width: 100%; margin-top: .75rem; }
+    .btn-navy:hover:not(:disabled) { background: var(--navy-d); }
+    .btn-navy:disabled { opacity: .5; cursor: default; }
+    .btn-outline { background: var(--white); color: var(--navy); border: 2px solid var(--navy); }
+    .btn-outline:hover { background: var(--navy); color: var(--white); }
+    .btn-danger { background: #fee2e2; color: var(--err); border: 1.5px solid #fecaca; }
+    .btn-danger:hover { background: var(--err); color: var(--white); }
+    .btn-sm { padding: .5rem 1.1rem; font-size: .83rem; }
+    .btn-xs { padding: .35rem .75rem; font-size: .76rem; }
+    .err-msg { color: var(--err); font-size: .85rem; margin-top: .6rem; min-height: 1rem; }
+    input[type=file] { display: none; }
+
+    /* ── DASHBOARD ── */
+    #dashboard { display: none; flex-direction: column; min-height: 100vh; }
+    .topbar { background: var(--navy); color: #fff; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 62px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,.2); }
+    .topbar-brand { font-size: 1rem; font-weight: 600; }
+    .topbar-brand span { color: #9eb9ad; font-weight: 400; font-size: .82rem; margin-left: .7rem; }
+    .btn-logout { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.25); padding: .4rem 1rem; border-radius: 50px; cursor: pointer; font-size: .83rem; font-family: inherit; transition: background .2s; }
+    .btn-logout:hover { background: rgba(255,255,255,.22); }
+
+    /* ── TABS ── */
+    .tabs { background: var(--white); border-bottom: 2px solid var(--border); display: flex; overflow-x: auto; padding: 0 1.5rem; }
+    .tab-btn { padding: 1.1rem 1.4rem; border: none; background: none; cursor: pointer; font-size: .95rem; font-weight: 500; color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all .2s; white-space: nowrap; font-family: inherit; }
+    .tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); font-weight: 600; }
+
+    /* ── TAB PANELS ── */
+    .tab-panel { display: none; padding: 2rem 1.5rem; max-width: 900px; margin: 0 auto; width: 100%; }
+    .tab-panel.active { display: block; }
+
+    /* ── SECTION HEADING ── */
+    .panel-title { font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: .3rem; }
+    .panel-hint { font-size: .9rem; color: var(--muted); margin-bottom: 1.75rem; line-height: 1.5; }
+
+    /* ── STATS ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.75rem; }
+    .stat-box { background: var(--white); border-radius: var(--r); padding: 1.4rem 1.25rem; border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .stat-box .lbl { font-size: .75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: .5rem; }
+    .stat-box .val { font-size: 2.2rem; font-weight: 800; color: var(--navy); line-height: 1; }
+    .stat-box .sub { font-size: .75rem; color: var(--muted); margin-top: .35rem; }
+    .chart-box { background: var(--white); border-radius: var(--r); padding: 1.4rem; border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .chart-box h3 { font-size: .95rem; font-weight: 600; color: var(--navy); margin-bottom: 1rem; }
+    .chart-wrap { height: 260px; position: relative; }
+
+    /* ── PHOTO CARDS (tab Fotos) ── */
+    .photo-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .photo-card { background: var(--white); border-radius: var(--r); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.06); overflow: hidden; }
+    .photo-card-head { padding: 1.1rem 1.25rem .5rem; }
+    .photo-card-head h3 { font-size: 1rem; font-weight: 700; color: var(--navy); }
+    .photo-card-head p { font-size: .82rem; color: var(--muted); margin-top: .15rem; }
+    .photo-preview-wrap { position: relative; cursor: pointer; }
+    .photo-preview { width: 100%; background: var(--bg); display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 220px; }
+    .photo-preview.portrait { aspect-ratio: 3/5; min-height: auto; }
+    .photo-preview img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .2s; }
+    .photo-preview .no-img { display: flex; flex-direction: column; align-items: center; gap: .5rem; color: var(--muted); font-size: .85rem; padding: 2rem; }
+    .photo-preview .no-img span { font-size: 2.5rem; }
+    .photo-overlay { position: absolute; inset: 0; background: rgba(45,69,84,.55); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .2s; }
+    .photo-preview-wrap:hover .photo-overlay { opacity: 1; }
+    .photo-overlay-text { color: white; font-size: .9rem; font-weight: 600; text-align: center; line-height: 1.4; }
+    .photo-actions { padding: 1rem 1.25rem 1.25rem; display: flex; flex-direction: column; gap: .6rem; }
+    .photo-actions label.btn { width: 100%; }
+    .photo-status { font-size: .82rem; min-height: .9rem; text-align: center; }
+    .photo-status.ok  { color: var(--ok); }
+    .photo-status.err { color: var(--err); }
+    .uploading-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; display: none; }
+    .uploading-bar.active { display: block; }
+    .uploading-bar::after { content: ''; display: block; height: 100%; background: var(--navy); animation: slide 1.2s ease-in-out infinite; }
+    @keyframes slide { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+
+    /* ── RECURSOS TAB ── */
+    .res-header-card { background: var(--white); border-radius: var(--r); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.06); padding: 1.4rem; margin-bottom: 1.5rem; }
+    .res-header-card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 1rem; }
+    .fg { margin-bottom: .9rem; }
+    .fg label { display: block; font-size: .82rem; font-weight: 600; color: var(--text); margin-bottom: .3rem; }
+    .fg input, .fg textarea { width: 100%; padding: .7rem .9rem; border: 2px solid var(--border); border-radius: 9px; font-size: .92rem; outline: none; transition: border-color .2s; font-family: inherit; resize: vertical; }
+    .fg input:focus, .fg textarea:focus { border-color: var(--navy); }
+    .save-row { display: flex; gap: .75rem; align-items: center; margin-top: .4rem; }
+    .status-msg { font-size: .8rem; min-height: .9rem; }
+    .status-msg.ok  { color: var(--ok); }
+    .status-msg.err { color: var(--err); }
+
+    /* Resource cards list */
+    .res-list { display: flex; flex-direction: column; gap: 1.1rem; margin-bottom: 1.25rem; }
+    .res-row { background: var(--white); border-radius: var(--r); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.06); overflow: hidden; }
+    .res-row-head { background: var(--navy); padding: .6rem 1.1rem; display: flex; align-items: center; justify-content: space-between; }
+    .res-row-head .num { color: rgba(255,255,255,.7); font-size: .78rem; font-weight: 700; }
+    .res-row-head .row-btns { display: flex; gap: .35rem; }
+    .btn-icon { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); color: #fff; border-radius: 6px; width: 28px; height: 28px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: .85rem; transition: background .2s; }
+    .btn-icon:hover { background: rgba(255,255,255,.25); }
+    .btn-icon.red { background: rgba(220,38,38,.3); border-color: rgba(220,38,38,.5); }
+    .btn-icon.red:hover { background: rgba(220,38,38,.6); }
+    .res-row-body { display: grid; grid-template-columns: 200px 1fr; }
+    .res-img-col { background: var(--bg); padding: 1rem; display: flex; flex-direction: column; gap: .7rem; align-items: center; border-right: 1px solid var(--border); }
+    .res-img-box { width: 160px; height: 160px; border-radius: 10px; overflow: hidden; border: 2px dashed var(--border); cursor: pointer; position: relative; background: var(--white); display: flex; align-items: center; justify-content: center; transition: border-color .2s; }
+    .res-img-box:hover { border-color: var(--navy); }
+    .res-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .res-img-box .img-ph { font-size: .75rem; color: var(--muted); text-align: center; padding: .75rem; line-height: 1.4; }
+    .res-img-overlay { position: absolute; inset: 0; background: rgba(45,69,84,.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .2s; font-size: .75rem; color: #fff; font-weight: 600; }
+    .res-img-box:hover .res-img-overlay { opacity: 1; }
+    .res-fields-col { padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: .7rem; }
+    .res-save-bar { display: flex; gap: .65rem; align-items: center; margin-top: auto; padding-top: .3rem; }
+    .add-card-btn { display: flex; align-items: center; gap: .6rem; padding: 1rem; border: 2px dashed var(--border); border-radius: var(--r); background: transparent; cursor: pointer; width: 100%; color: var(--muted); font-size: .9rem; font-weight: 600; font-family: inherit; transition: all .2s; }
+    .add-card-btn:hover { border-color: var(--navy); color: var(--navy); background: rgba(45,69,84,.03); }
+    .add-card-btn span { font-size: 1.4rem; line-height: 1; }
+
+    /* ── CONTACTO ── */
+    .contact-card { background: var(--white); border-radius: var(--r); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.06); padding: 1.5rem; max-width: 520px; }
+
+    /* ── SPINNER ── */
+    .spinner { width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .65s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 640px) {
+      .tab-panel { padding: 1.25rem 1rem; }
+      .res-row-body { grid-template-columns: 1fr; }
+      .res-img-col { border-right: none; border-bottom: 1px solid var(--border); flex-direction: row; align-items: flex-start; }
+      .topbar { padding: 0 1rem; }
+      .topbar-brand span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-brand">Psic. Josué Berrú Negrete</div>
+    <h1>Panel de Administración</h1>
+    <p>Ingresa tu contraseña para gestionar el sitio web</p>
+    <form id="login-form">
+      <input class="inp" type="password" id="pwd" placeholder="Contraseña" autocomplete="current-password" style="margin-top:.5rem">
+      <button type="submit" class="btn btn-navy" id="login-btn">Entrar al panel</button>
+      <div class="err-msg" id="login-err"></div>
+    </form>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-brand">Panel Admin <span>psicjosueberru.com</span></div>
+    <button class="btn-logout" id="logout-btn">Salir</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="stats">📊 Estadísticas</button>
+    <button class="tab-btn" data-tab="fotos">🖼 Fotos del sitio</button>
+    <button class="tab-btn" data-tab="recursos">📋 Sección Recursos</button>
+    <button class="tab-btn" data-tab="contacto">📞 Contacto</button>
+  </div>
+
+  <!-- ── ESTADÍSTICAS ── -->
+  <div class="tab-panel active" id="tab-stats">
+    <div class="panel-title">Estadísticas de visitas</div>
+    <div class="panel-hint">Aquí puedes ver cuántas personas visitan tu sitio web.</div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="lbl">Total visitas</div><div class="val" id="s-total">—</div><div class="sub">Desde el inicio</div></div>
+      <div class="stat-box"><div class="lbl">Hoy</div><div class="val" id="s-today">—</div><div class="sub" id="s-today-date">—</div></div>
+      <div class="stat-box"><div class="lbl">Esta semana</div><div class="val" id="s-week">—</div><div class="sub">Últimos 7 días</div></div>
+      <div class="stat-box"><div class="lbl">Este mes</div><div class="val" id="s-month">—</div><div class="sub">Últimos 30 días</div></div>
+    </div>
+    <div class="chart-box">
+      <h3>Visitas diarias — últimos 30 días</h3>
+      <div class="chart-wrap"><canvas id="visits-chart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ── FOTOS DEL SITIO ── -->
+  <div class="tab-panel" id="tab-fotos">
+    <div class="panel-title">Fotos del sitio</div>
+    <div class="panel-hint">Haz clic en "Cambiar foto" para actualizar cualquier imagen. La foto nueva aparecerá en el sitio inmediatamente.</div>
+    <div class="photo-section" id="photo-section">
+      <!-- Generado por JavaScript -->
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN RECURSOS ── -->
+  <div class="tab-panel" id="tab-recursos">
+    <div class="panel-title">Sección "Recursos y Salud Mental"</div>
+    <div class="panel-hint">Aquí puedes cambiar el título, la descripción y las tarjetas de esta sección de tu sitio web. También puedes agregar nuevas tarjetas o eliminar las que no necesitas.</div>
+
+    <!-- Encabezado -->
+    <div class="res-header-card">
+      <h3>✏️ Título y descripción de la sección</h3>
+      <div class="fg">
+        <label>Título principal</label>
+        <input type="text" id="res-sec-title" placeholder="Recursos y Salud Mental">
+      </div>
+      <div class="fg">
+        <label>Descripción (texto debajo del título)</label>
+        <textarea id="res-sec-subtitle" rows="2" placeholder="Herramientas y guías visuales..."></textarea>
+      </div>
+      <div class="save-row">
+        <button class="btn btn-outline btn-sm" id="save-res-header">💾 Guardar título y descripción</button>
+        <div class="status-msg" id="res-header-st"></div>
+      </div>
+    </div>
+
+    <!-- Tarjetas -->
+    <div class="panel-title" style="margin-bottom:.4rem; font-size:1.05rem">Tarjetas de recursos</div>
+    <div class="panel-hint" style="margin-bottom:1rem">Cada tarjeta tiene una imagen, un título y una descripción. Puedes cambiar el orden con las flechas ↑↓, y eliminar las que no necesitas.</div>
+    <div class="res-list" id="res-list"></div>
+    <button class="add-card-btn" id="add-res-card">
+      <span>＋</span> Agregar nueva tarjeta
+    </button>
+  </div>
+
+  <!-- ── CONTACTO ── -->
+  <div class="tab-panel" id="tab-contacto">
+    <div class="panel-title">Información de contacto</div>
+    <div class="panel-hint">Actualiza el número de teléfono y WhatsApp que aparecen en tu sitio.</div>
+    <div class="contact-card">
+      <div class="fg">
+        <label>📱 Número de teléfono (texto que se muestra)</label>
+        <input type="text" id="inp-phone" placeholder="+593 987 542217">
+      </div>
+      <div class="fg">
+        <label>💬 Número de WhatsApp (solo dígitos, sin + ni espacios)</label>
+        <input type="text" id="inp-whatsapp" placeholder="593987542217">
+      </div>
+      <div class="save-row" style="margin-top:1rem">
+        <button class="btn btn-outline btn-sm" id="save-contact">💾 Guardar contacto</button>
+        <div class="status-msg" id="contact-st"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── UTILIDADES ──────────────────────────────────────────────────────
+const $ = id => document.getElementById(id)
+let visitChart = null
+let resCards = []
+
+async function api(method, path, body) {
+  const opts = { method, headers: {} }
+  if (body instanceof FormData) { opts.body = body }
+  else if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body) }
+  const res = await fetch(path, opts)
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(data.error || `Error ${res.status}`)
+  return data
+}
+
+function setStatus(el, msg, type) {
+  el.textContent = msg
+  el.className = 'status-msg ' + (type || '')
+  if (type === 'ok') setTimeout(() => { if (el.textContent === msg) { el.textContent = ''; el.className = 'status-msg' } }, 4000)
+}
+
+// ── LOGIN ────────────────────────────────────────────────────────────
+$('login-form').addEventListener('submit', async e => {
+  e.preventDefault()
+  const btn = $('login-btn'), err = $('login-err')
+  err.textContent = ''; btn.innerHTML = '<div class="spinner"></div>'; btn.disabled = true
+  try {
+    await api('POST', '/api/admin/login', { password: $('pwd').value })
+    $('login-screen').style.display = 'none'
+    $('dashboard').style.display = 'flex'
+    loadAll()
+  } catch(ex) { err.textContent = ex.message }
+  finally { btn.innerHTML = 'Entrar al panel'; btn.disabled = false }
+})
+
+$('logout-btn').addEventListener('click', async () => {
+  await fetch('/api/admin/logout', { method: 'POST' }).catch(() => {})
+  location.reload()
+})
+
+// ── TABS ─────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'))
+    btn.classList.add('active')
+    $('tab-' + btn.dataset.tab).classList.add('active')
+  })
+})
+
+function loadAll() { loadStats(); loadFotos(); loadRecursos(); loadContacto() }
+
+// ── ESTADÍSTICAS ─────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const d = await api('GET', '/api/admin/stats')
+    const daily = d.daily || {}, today = new Date().toISOString().split('T')[0]
+    $('s-total').textContent = (d.total || 0).toLocaleString()
+    $('s-today').textContent = (daily[today] || 0).toLocaleString()
+    $('s-today-date').textContent = today
+    const days30 = last30()
+    $('s-week').textContent  = days30.slice(-7).reduce((s, d) => s + (daily[d] || 0), 0).toLocaleString()
+    $('s-month').textContent = days30.reduce((s, d) => s + (daily[d] || 0), 0).toLocaleString()
+    renderChart(days30, daily)
+  } catch(ex) { console.error('Stats error:', ex) }
+}
+
+function last30() {
+  return Array.from({ length: 30 }, (_, i) => {
+    const d = new Date(); d.setDate(d.getDate() - (29 - i))
+    return d.toISOString().split('T')[0]
+  })
+}
+
+function renderChart(days, daily) {
+  const labels = days.map(d => { const [,m,dd] = d.split('-'); return `${dd}/${m}` })
+  const vals = days.map(d => daily[d] || 0)
+  if (visitChart) visitChart.destroy()
+  visitChart = new Chart($('visits-chart'), {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Visitas', data: vals, backgroundColor: 'rgba(45,69,84,.75)', borderColor: '#2d4554', borderWidth: 1, borderRadius: 5 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } }, x: { grid: { display: false } } } }
+  })
+}
+
+// ── FOTOS DEL SITIO ──────────────────────────────────────────────────
+async function loadFotos() {
+  try {
+    const cfg = await api('GET', '/api/admin/config')
+    const slots = cfg.imageSlots || []
+    const section = $('photo-section')
+    section.innerHTML = ''
+    slots.forEach(slot => section.appendChild(buildPhotoCard(slot)))
+  } catch(ex) { console.error('Fotos error:', ex) }
+}
+
+function buildPhotoCard(slot) {
+  const card = document.createElement('div')
+  card.className = 'photo-card'
+  const activeSrc = slot.path || slot.defaultSrc || ''
+  const isPortrait = slot.id === 'profile'
+
+  const labels = {
+    profile: { title: '👤 Foto de perfil', hint: 'La foto tuya que aparece en la sección "Sobre mí"' },
+    logo: { title: '🏷 Logo del sitio', hint: 'El logo que aparece en la parte superior y en la página principal' }
+  }
+  const lbl = labels[slot.id] || { title: slot.name, hint: 'Imagen del sitio web' }
+
+  card.innerHTML = `
+    <div class="photo-card-head">
+      <h3>${lbl.title}</h3>
+      <p>${lbl.hint}</p>
+    </div>
+    <div class="photo-preview-wrap">
+      <div class="photo-preview ${isPortrait ? 'portrait' : ''}">
+        ${activeSrc
+          ? `<img id="photo-img-${slot.id}" src="${activeSrc}" alt="${slot.name}">`
+          : `<div class="no-img"><span>🖼</span><div>Sin imagen</div></div>`
+        }
+      </div>
+      <div class="photo-overlay">
+        <div class="photo-overlay-text">📷 Haz clic para<br>cambiar la foto</div>
+      </div>
+    </div>
+    <div class="uploading-bar" id="bar-${slot.id}"></div>
+    <div class="photo-actions">
+      <label class="btn btn-outline btn-sm" for="file-${slot.id}" style="cursor:pointer">
+        📷 Cambiar ${slot.id === 'logo' ? 'logo' : 'foto'}
+      </label>
+      <input type="file" id="file-${slot.id}" accept="image/*">
+      <div class="photo-status" id="pst-${slot.id}"></div>
+    </div>
+  `
+
+  // Hacer clic en la imagen también abre el picker
+  card.querySelector('.photo-preview-wrap').addEventListener('click', () => {
+    card.querySelector(`#file-${slot.id}`).click()
+  })
+
+  const fileInput = card.querySelector(`#file-${slot.id}`)
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files[0]
+    if (!file) return
+    const bar = $(`bar-${slot.id}`)
+    const st = $(`pst-${slot.id}`)
+    bar.classList.add('active')
+    setStatus(st, 'Subiendo...', '')
+    const fd = new FormData()
+    fd.append('image', file)
+    try {
+      const r = await api('POST', `/api/admin/image/${slot.id}`, fd)
+      slot.path = r.path
+      const imgEl = card.querySelector(`#photo-img-${slot.id}`)
+      if (imgEl) { imgEl.src = r.path + '?t=' + Date.now() }
+      else {
+        const prev = card.querySelector('.photo-preview')
+        prev.innerHTML = `<img id="photo-img-${slot.id}" src="${r.path}?t=${Date.now()}" alt="${slot.name}">`
+      }
+      setStatus(st, '✅ Foto actualizada correctamente', 'ok')
+      fileInput.value = ''
+    } catch(ex) { setStatus(st, '❌ ' + ex.message, 'err') }
+    finally { bar.classList.remove('active') }
+  })
+
+  return card
+}
+
+// ── SECCIÓN RECURSOS ─────────────────────────────────────────────────
+async function loadRecursos() {
+  try {
+    const cfg = await api('GET', '/api/admin/config')
+    const r = cfg.resources || {}
+    if (r.title)    $('res-sec-title').value = r.title
+    if (r.subtitle) $('res-sec-subtitle').value = r.subtitle
+    resCards = r.cards || []
+    renderResCards()
+  } catch(ex) { console.error('Recursos error:', ex) }
+}
+
+$('save-res-header').addEventListener('click', async () => {
+  const btn = $('save-res-header'), st = $('res-header-st')
+  btn.disabled = true; btn.textContent = 'Guardando...'
+  try {
+    await api('PATCH', '/api/admin/resources', {
+      title: $('res-sec-title').value.trim(),
+      subtitle: $('res-sec-subtitle').value.trim()
+    })
+    setStatus(st, '✅ Guardado', 'ok')
+  } catch(ex) { setStatus(st, '❌ ' + ex.message, 'err') }
+  finally { btn.disabled = false; btn.textContent = '💾 Guardar título y descripción' }
+})
+
+function renderResCards() {
+  const list = $('res-list')
+  list.innerHTML = ''
+  resCards.forEach((card, idx) => list.appendChild(buildResCard(card, idx)))
+}
+
+function buildResCard(card, idx) {
+  const row = document.createElement('div')
+  row.className = 'res-row'
+  const isFirst = idx === 0, isLast = idx === resCards.length - 1
+
+  row.innerHTML = `
+    <div class="res-row-head">
+      <span class="num">Tarjeta ${idx + 1}</span>
+      <div class="row-btns">
+        <button class="btn-icon up" title="Subir" ${isFirst ? 'disabled style="opacity:.3"' : ''}>↑</button>
+        <button class="btn-icon down" title="Bajar" ${isLast ? 'disabled style="opacity:.3"' : ''}>↓</button>
+        <button class="btn-icon red del" title="Eliminar tarjeta">🗑</button>
+      </div>
+    </div>
+    <div class="res-row-body">
+      <div class="res-img-col">
+        <label for="rfi-${card.id}">
+          <div class="res-img-box">
+            ${card.image
+              ? `<img src="${card.image}" alt="${card.title}">`
+              : `<div class="img-ph">📷 Sin imagen<br><small>Haz clic para agregar</small></div>`
+            }
+            <div class="res-img-overlay">📷 Cambiar imagen</div>
+          </div>
+        </label>
+        <input type="file" id="rfi-${card.id}" accept="image/*">
+        <div class="status-msg" id="ri-st-${card.id}"></div>
+      </div>
+      <div class="res-fields-col">
+        <div class="fg">
+          <label>Título de la tarjeta</label>
+          <input type="text" class="r-title" value="${escHtml(card.title)}" placeholder="Ej: Dominando la Ansiedad">
+        </div>
+        <div class="fg">
+          <label>Descripción</label>
+          <textarea class="r-desc" rows="3" placeholder="Breve descripción del recurso...">${escHtml(card.description)}</textarea>
+        </div>
+        <div class="res-save-bar">
+          <button class="btn btn-outline btn-sm r-save">💾 Guardar cambios</button>
+          <div class="status-msg r-st"></div>
+        </div>
+      </div>
+    </div>
+  `
+
+  // Subir imagen (auto al seleccionar)
+  const fi = row.querySelector(`#rfi-${card.id}`)
+  const imgBox = row.querySelector('.res-img-box')
+  const imgSt = row.querySelector(`#ri-st-${card.id}`)
+  fi.addEventListener('change', async () => {
+    const file = fi.files[0]; if (!file) return
+    setStatus(imgSt, 'Subiendo imagen...', '')
+    const fd = new FormData(); fd.append('image', file)
+    try {
+      const r = await api('POST', `/api/admin/resources/card/${card.id}/image`, fd)
+      card.image = r.path
+      imgBox.innerHTML = `<img src="${r.path}?t=${Date.now()}" alt="${card.title}"><div class="res-img-overlay">📷 Cambiar imagen</div>`
+      setStatus(imgSt, '✅ Imagen guardada', 'ok')
+      fi.value = ''
+    } catch(ex) { setStatus(imgSt, '❌ ' + ex.message, 'err') }
+  })
+
+  // Guardar texto
+  row.querySelector('.r-save').addEventListener('click', async () => {
+    const btn = row.querySelector('.r-save'), st = row.querySelector('.r-st')
+    btn.disabled = true; btn.textContent = 'Guardando...'
+    const title = row.querySelector('.r-title').value.trim()
+    const description = row.querySelector('.r-desc').value.trim()
+    try {
+      await api('PATCH', `/api/admin/resources/card/${card.id}`, { title, description })
+      card.title = title; card.description = description
+      setStatus(st, '✅ Guardado', 'ok')
+    } catch(ex) { setStatus(st, '❌ ' + ex.message, 'err') }
+    finally { btn.disabled = false; btn.textContent = '💾 Guardar cambios' }
+  })
+
+  // Reordenar
+  row.querySelector('.up').addEventListener('click', async () => {
+    if (idx === 0) return
+    ;[resCards[idx - 1], resCards[idx]] = [resCards[idx], resCards[idx - 1]]
+    renderResCards()
+    api('PATCH', '/api/admin/resources/order', { ids: resCards.map(c => c.id) }).catch(() => {})
+  })
+  row.querySelector('.down').addEventListener('click', async () => {
+    if (idx === resCards.length - 1) return
+    ;[resCards[idx], resCards[idx + 1]] = [resCards[idx + 1], resCards[idx]]
+    renderResCards()
+    api('PATCH', '/api/admin/resources/order', { ids: resCards.map(c => c.id) }).catch(() => {})
+  })
+
+  // Eliminar
+  row.querySelector('.del').addEventListener('click', async () => {
+    if (!confirm(`¿Estás seguro de eliminar la tarjeta "${card.title}"?`)) return
+    try {
+      await api('DELETE', `/api/admin/resources/card/${card.id}`)
+      resCards = resCards.filter(c => c.id !== card.id)
+      renderResCards()
+    } catch(ex) { alert(ex.message) }
+  })
+
+  return row
+}
+
+$('add-res-card').addEventListener('click', async () => {
+  try {
+    const r = await api('POST', '/api/admin/resources/card', { title: 'Nueva tarjeta', description: '' })
+    resCards.push(r.card)
+    renderResCards()
+    setTimeout(() => $('res-list').lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80)
+  } catch(ex) { alert(ex.message) }
+})
+
+// ── CONTACTO ─────────────────────────────────────────────────────────
+async function loadContacto() {
+  try {
+    const cfg = await api('GET', '/api/admin/config')
+    const c = cfg.content || {}
+    if (c.phone)    $('inp-phone').value = c.phone
+    if (c.whatsapp) $('inp-whatsapp').value = c.whatsapp
+  } catch(ex) { console.error('Contacto error:', ex) }
+}
+
+$('save-contact').addEventListener('click', async () => {
+  const btn = $('save-contact'), st = $('contact-st')
+  btn.disabled = true; btn.textContent = 'Guardando...'
+  try {
+    await api('PATCH', '/api/admin/content', { phone: $('inp-phone').value.trim(), whatsapp: $('inp-whatsapp').value.trim() })
+    setStatus(st, '✅ Guardado correctamente', 'ok')
+  } catch(ex) { setStatus(st, '❌ ' + ex.message, 'err') }
+  finally { btn.disabled = false; btn.textContent = '💾 Guardar contacto' }
+})
+
+// ── HELPERS ──────────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+
+// ── INICIAR: verificar sesión ─────────────────────────────────────────
+;(async () => {
+  try {
+    await api('GET', '/api/admin/stats')
+    $('login-screen').style.display = 'none'
+    $('dashboard').style.display = 'flex'
+    loadAll()
+  } catch { /* sin sesión → mostrar login */ }
+})()
+</script>
+</body>
+</html>

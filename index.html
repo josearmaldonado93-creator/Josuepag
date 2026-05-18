@@ -10,6 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="./style.css">
+
+    <!-- Google Analytics — reemplaza G-XXXXXXXXXX con tu Measurement ID real -->
+    <!-- Para obtenerlo: analytics.google.com → Admin → Data Streams → tu sitio → Measurement ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
 </head>
 <body>
 
@@ -17,14 +27,15 @@
     <header id="header">
         <nav>
             <a href="#" class="logo">
-                <img src="/logo.png" alt="Josué Berrú Logo" class="logo-branded">
+                <img id="img-logo" src="/logo.png" alt="Josué Berrú Logo" class="logo-branded">
             </a>
             <ul class="nav-links">
                 <li><a href="#servicios">Servicios</a></li>
                 <li><a href="#perfil">Perfil</a></li>
                 <li><a href="#recursos">Recursos</a></li>
                 <li><a href="#ubicacion">Ubicación</a></li>
-                <li><a href="#contacto" class="btn-primary">Agendar Cita</a></li>
+                <li style="display: flex; align-items: center;"><a href="https://www.instagram.com/psicjosueberru/" target="_blank" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a></li>
+                <li><a href="#agendar" class="btn-primary">Agendar Cita</a></li>
             </ul>
             <button class="mobile-menu-btn" aria-label="Menú">
                 <i data-lucide="menu" style="width:24px;height:24px;"></i>
@@ -38,40 +49,25 @@
             <span class="hero-tag">Psicólogo Clínico en Quito</span>
             <h1>Sanar es un <span>proceso</span>, no un destino.</h1>
             <p class="hero-subtitle">
-                Acompañamiento profesional basado en evidencia para adultos. 
-                Psicoterapia psicodinámica en un espacio seguro, ético y libre de prejuicios.
+                Detrás del malestar, la ira y el sufrimiento suele haber una historia. Juntos podemos comprenderla para avanzar y sanar.
             </p>
             <div class="hero-cta">
-                <a href="https://wa.me/593987542217" target="_blank" class="btn-primary">
+                <a href="#agendar" class="btn-primary">
                     <i data-lucide="calendar" style="width:18px;height:18px;"></i>
-                    Agenda tu consulta
+                    Agendar cita
                 </a>
                 <a href="#servicios" class="btn-primary btn-outline">Conoce mi enfoque</a>
             </div>
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <h3>Máster</h3>
-                    <p>En Género y Desarrollo</p>
-                </div>
-                <div class="stat-item">
-                    <h3>Presencial</h3>
-                    <p>y Online</p>
-                </div>
-                <div class="stat-item">
-                    <h3>Adultos</h3>
-                    <p>Atención especializada</p>
-                </div>
-            </div>
         </div>
-        <div class="hero-image" style="background: rgba(45, 69, 84, 0.08); border-radius: 40px; padding: 3rem; box-shadow: inset 0 0 40px rgba(45, 69, 84, 0.05);">
-            <img src="/logo.png" alt="Josué Berrú Logo" style="width: 100%; max-width: 450px; opacity: 1; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));">
+        <div class="hero-image" style="background: var(--color-primary); border-radius: 40px; padding: 4rem; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+            <img id="img-hero" src="/logo.png" alt="Josué Berrú Logo" style="width: 100%; max-width: 400px; opacity: 1; filter: brightness(0) invert(1) drop-shadow(0 10px 20px rgba(0,0,0,0.2));">
         </div>
     </section>
 
     <!-- Quote Section -->
     <section class="quote-section">
         <blockquote>
-            "Espacio seguro, ético y libre de prejuicios para tu proceso de sanación."
+            "Espacio seguro, ético y confidencial para acompañarte en tu proceso hacia el bienestar."
             <cite>— Psic. Josué Berrú Negrete</cite>
         </blockquote>
     </section>
@@ -80,22 +76,16 @@
     <section id="servicios" class="section">
         <div class="section-header">
             <h2>Especialidades Terapéuticas</h2>
-            <p>Atención flexible adaptada a tus necesidades, disponible en formato presencial o virtual.</p>
+            <p>Acompañamiento psicológico para adultos y adolescentes desde una mirada profunda, ética y profesional, en un espacio seguro y libre de prejuicios.</p>
         </div>
         <div class="services-grid">
             <div class="service-card">
                 <div class="service-icon">
                     <i data-lucide="brain" style="width:24px;height:24px;"></i>
                 </div>
-                <h3>Psicoterapia Psicodinámica</h3>
-                <p>Exploración profunda de procesos inconscientes para comprender y resolver conflictos emocionales actuales. Un enfoque basado en evidencia que busca comprender la raíz de tus dificultades.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">
-                    <i data-lucide="users" style="width:24px;height:24px;"></i>
-                </div>
-                <h3>Género y Desarrollo</h3>
-                <p>Enfoque especializado en identidades, roles y dinámicas de poder. Acompañamiento en la construcción y comprensión de tu identidad desde una perspectiva crítica y sensible.</p>
+                <h3>La psicoterapia psicodinámica</h3>
+                <p>La American Psychological Association describe la psicoterapia psicodinámica como un enfoque orientado a comprender cómo patrones emocionales, relaciones pasadas y experiencias tempranas influyen en la vida actual. Su objetivo no es solo aliviar síntomas, sino promover cambios profundos y sostenibles.</p>
+                <p style="font-size: 0.85rem; margin-top: 1rem; opacity: 0.8;">En esta línea, Jonathan Shedler, en su artículo <em>The Efficacy of Psychodynamic Psychotherapy</em> (2010), concluyó que la evidencia empírica respalda su eficacia, con resultados comparables a otras terapias, observando que muchos pacientes continúan mejorando incluso después de finalizar el tratamiento.</p>
             </div>
             <div class="service-card">
                 <div class="service-icon">
@@ -107,20 +97,22 @@
         </div>
     </section>
 
+
     <!-- Resources Section -->
     <section id="recursos" class="section" style="background: rgba(158, 185, 173, 0.1);">
         <div class="section-header">
-            <h2>Recursos y Salud Mental</h2>
-            <p>Herramientas y guías visuales para ayudarte a comprender mejor tus procesos emocionales.</p>
+            <h2 id="recursos-title">Recursos y Salud Mental</h2>
+            <p id="recursos-subtitle">Herramientas y guías visuales para ayudarte a comprender mejor tus procesos emocionales.</p>
         </div>
-        <div class="services-grid">
+        <div class="services-grid" id="recursos-grid">
+            <!-- Contenido estático de respaldo (se reemplaza por JavaScript) -->
             <div class="service-card" style="padding: 1.5rem;">
-                <img src="/post-ansiedad.jpg" alt="¿Sabes cómo dominar la ansiedad?" style="border-radius: 12px; margin-bottom: 1.5rem;">
+                <img src="/post-ansiedad.jpg" alt="Dominando la Ansiedad" style="border-radius: 12px; margin-bottom: 1.5rem;">
                 <h3 style="font-size: 1.1rem;">Dominando la Ansiedad</h3>
                 <p>Identifica y comprende los mecanismos de la ansiedad para recuperar tu equilibrio.</p>
             </div>
             <div class="service-card" style="padding: 1.5rem;">
-                <img src="/post-burnout.jpg" alt="Entendiendo el Burnout" style="border-radius: 12px; margin-bottom: 1.5rem;">
+                <img src="/post-burnout.jpg" alt="Ciclo del Burnout" style="border-radius: 12px; margin-bottom: 1.5rem;">
                 <h3 style="font-size: 1.1rem;">Ciclo del Burnout</h3>
                 <p>Reconoce señales de agotamiento antes de que afecten tu salud física y mental.</p>
             </div>
@@ -136,40 +128,36 @@
     <section id="perfil" class="section">
         <div class="about-content">
             <div class="about-image">
-                <div class="about-image-placeholder" style="background: var(--color-primary); color: white;">
-                    <i data-lucide="user" style="width:64px;height:64px; opacity: 1;"></i>
-                    <p style="color: white; opacity: 0.9;">Psic. Josué Berrú Negrete</p>
-                </div>
+                <img id="img-profile" src="./Img/Josue.jpeg" alt="Psic. Josué Berrú Negrete" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
             </div>
             <div class="about-text">
                 <h2>Perfil Profesional</h2>
-                <p class="lead">
-                    Soy Josué Berrú Negrete, psicólogo clínico con formación en psicoterapia psicodinámica y máster en Género y Desarrollo.
-                </p>
-                <p>
-                    Mi práctica se centra en ofrecer un acompañamiento profesional para adultos que buscan comprenderse a sí mismos y superar dificultades emocionales desde un enfoque profundo y basado en evidencia.
-                </p>
-                <div class="credentials">
-                    <div class="credential-item">
-                        <i data-lucide="graduation-cap" style="width:20px;height:20px;"></i>
-                        <div>
-                            <h4>Formación Académica</h4>
-                            <p>Máster en Género y Desarrollo</p>
-                        </div>
+                <h3>Josué Berrú Negrete</h3>
+                <p class="registration">Registro MSP Ecuador: 1724342843</p>
+                <div class="bio-bullets">
+                    <p>• Soy <strong>Psicólogo Clínico</strong>, graduado por la Pontificia Universidad Católica del Ecuador (2019), y <strong>Máster en Ciencias Sociales, Género y Desarrollo</strong> por FLACSO Ecuador (2023).</p>
+                    <p>• Cuento con más de cinco años de experiencia acompañando procesos psicoterapéuticos con <strong>adultos y adolescentes</strong> desde una orientación psicodinámica. A lo largo de mi trayectoria también he trabajado en contextos educativos, asistencia humanitaria, movilidad humana y organizaciones internacionales, además de acompañar a población LGBTIQ+.</p>
+                    <p>• Estas experiencias me han permitido desarrollar una mirada amplia e integradora sobre el malestar psicológico, comprendiendo cómo la historia personal, las emociones, los vínculos y el contexto social influyen en lo que hoy te ocurre. Mi objetivo es ofrecerte un espacio profesional, humano y libre de juicios, donde podamos trabajar juntos hacia cambios profundos y sostenibles.</p>
+                </div>
+
+                <div class="extra-info">
+                    <div class="info-block">
+                        <h4>Capacitaciones y certificaciones</h4>
+                        <ul class="styled-list">
+                            <li>ORGAEPSI – Capacitación sobre entrevista clínica para evaluación y psicodiagnóstico: aplicación en psicoterapia – 60 horas – Abril 2026</li>
+                            <li>Corporación Empresarial de Capacitación y Universidad Central del Ecuador: Diplomado en Psicología Forense - 125 horas - Abril 2021</li>
+                            <li>Instituto de Neurociencias de la Junta de Beneficencia de Guayaquil: Seminario de Psicodiagnóstico - 40 horas - Septiembre 2020</li>
+                            <li>Council of British International Schools / The Teaching Assistant College: Diploma para Asistentes de Enseñanza Internacionales - Octubre 2019</li>
+                        </ul>
                     </div>
-                    <div class="credential-item">
-                        <i data-lucide="shield-check" style="width:20px;height:20px;"></i>
-                        <div>
-                            <h4>Enfoque Terapéutico</h4>
-                            <p>Psicoterapia psicodinámica basada en evidencia</p>
-                        </div>
-                    </div>
-                    <div class="credential-item">
-                        <i data-lucide="heart-handshake" style="width:20px;height:20px;"></i>
-                        <div>
-                            <h4>Compromiso Ético</h4>
-                            <p>Espacio libre de prejuicios y absolutamente confidencial</p>
-                        </div>
+                    <div class="info-block">
+                        <h4>Ponencias y publicaciones</h4>
+                        <ul class="styled-list">
+                            <li>Ponente en la capacitación “Atención en Salud Mental para población LGBTQ” – Psicoeducación – Abril 2022</li>
+                            <li>Berrú, Josué (2023). "Feminismos, diversidades sexuales y fe cristiana: una aproximación a la conformación de la disidencia religiosa en el Ecuador en el contexto de la arremetida hegemónica de los movimientos anti-género". Tesis de maestría en Género y Desarrollo - FLACSO Ecuador</li>
+                            <li>Berrú, Josué., Garita, Karen. “Investigación sobre el impacto de la covid-19 en el cumplimiento de derechos de las personas LGBTI de Ecuador”. Fundación Mujer & Mujer y Fundación SENDAS. Financiado por la Unión Europea.</li>
+                            <li>Berrú, Josué (2019). “Propuesta teórica de dispositivo de encuentro entre el psicoanálisis y la pediatría con relación al trabajo clínico con niños” – PUCE</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -228,7 +216,7 @@
                     <i data-lucide="phone" style="width:20px;height:20px;"></i>
                     <div>
                         <h4>Contacto Directo</h4>
-                        <p>+593 987 542217</p>
+                        <p class="admin-phone">+593 987 542217</p>
                     </div>
                 </div>
 
@@ -254,15 +242,7 @@
             <p>Resolvemos las dudas más comunes antes de tu primera sesión.</p>
         </div>
         <div class="faq-list">
-            <div class="faq-item active">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    ¿Qué es la psicoterapia psicodinámica?
-                    <i data-lucide="chevron-down" style="width:20px;height:20px;"></i>
-                </div>
-                <div class="faq-answer">
-                    Es un enfoque terapéutico que explora cómo experiencias pasadas y procesos inconscientes influyen en tu presente. Busca comprender la raíz de los síntomas para lograr cambios profundos y duraderos.
-                </div>
-            </div>
+
             <div class="faq-item">
                 <div class="faq-question" onclick="toggleFaq(this)">
                     ¿Las sesiones online son igual de efectivas?
@@ -278,7 +258,7 @@
                     <i data-lucide="chevron-down" style="width:20px;height:20px;"></i>
                 </div>
                 <div class="faq-answer">
-                    Ofrezco atención especializada para adultos que buscan un espacio seguro para explorar conflictos emocionales, identidad, roles sociales y dinámicas de poder.
+                    Ofrezco acompañamiento profesional basado en evidencia para <strong>adultos y adolescentes</strong>. Psicoterapia psicodinámica en un espacio seguro, ético y libre de prejuicios donde todas las personas son bienvenidas.
                 </div>
             </div>
             <div class="faq-item">
@@ -287,8 +267,52 @@
                     <i data-lucide="chevron-down" style="width:20px;height:20px;"></i>
                 </div>
                 <div class="faq-answer">
-                    Absolutamente. La confidencialidad es un pilar ético fundamental de mi práctica. Tu información y lo conversado en sesión están protegidos bajo estrictos principios éticos profesionales.
+                    <p>Sí. La confidencialidad es un principio ético fundamental de mi práctica profesional. Todo lo compartido en sesión y la información relacionada con tu proceso se maneja con respeto, resguardo y criterio profesional.</p>
+                    <p>Al iniciar el acompañamiento recibirás un consentimiento informado donde se explican claramente los alcances de la confidencialidad, el manejo de datos y las excepciones contempladas por la ética profesional y la normativa vigente, especialmente en situaciones donde exista riesgo significativo para tu integridad o la de terceros. Mi compromiso es actuar siempre con transparencia y priorizando tu bienestar.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+        <div class="section-header">
+            <h2>Reseñas de Pacientes</h2>
+            <p>La experiencia de quienes han transitado este proceso de sanación.</p>
+        </div>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="review-stars">
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                </div>
+                <p class="review-text">"Encontrar un espacio tan ético y libre de juicios fue fundamental para mi proceso. Josué es un profesional excepcional que me ayudó a entender patrones que no veía."</p>
+                <p class="review-author">M. Rodríguez <span class="review-date">Paciente en consulta online</span></p>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                </div>
+                <p class="review-text">"Excelente acompañamiento. Su enfoque psicodinámico me permitió profundizar en temas personales de una manera segura y contenida. Altamente recomendado."</p>
+                <p class="review-author">A. Salazar <span class="review-date">Consulta presencial</span></p>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                    <i data-lucide="star" style="width:16px;height:16px;fill:currentColor"></i>
+                </div>
+                <p class="review-text">"Un espacio donde realmente me sentí bienvenido y escuchado. La profundidad con la que trabajamos los vínculos y el contexto social marcó la diferencia."</p>
+                <p class="review-author">J. Villacís <span class="review-date">Paciente adulto</span></p>
             </div>
         </div>
     </section>
@@ -302,18 +326,44 @@
             <div class="contact-methods">
                 <div class="contact-method">
                     <i data-lucide="phone" style="width:20px;height:20px;"></i>
-                    <span>+593 987 542217</span>
+                    <span class="admin-phone">+593 987 542217</span>
                 </div>
                 <div class="contact-method">
                     <i data-lucide="map-pin" style="width:20px;height:20px;"></i>
                     <span>Quito, Ecuador</span>
                 </div>
+                <div class="contact-method">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    <a href="https://www.instagram.com/psicjosueberru/" target="_blank" style="color: inherit; text-decoration: none;">Instagram</a>
+                </div>
             </div>
 
-            <a href="https://wa.me/593987542217" target="_blank" class="btn-primary btn-whatsapp">
+            <a href="https://wa.me/593987542217" class="admin-whatsapp" target="_blank" class="btn-primary btn-whatsapp">
                 <i data-lucide="message-circle" style="width:20px;height:20px;"></i>
                 Escribir por WhatsApp
             </a>
+        </div>
+    </section>
+
+    <!-- Appointment Section (Google Calendar) -->
+    <section id="agendar" class="section agenda-section">
+        <div class="section-header">
+            <h2>Agendar cita</h2>
+            <p>Elige el día y la hora que mejor se adapte a tu disponibilidad. Recibirás una confirmación inmediata en tu correo.</p>
+        </div>
+        <div class="calendar-container">
+            <!-- Instrucciones para Josué: Reemplaza el src de abajo con tu enlace de Google Calendar -->
+            <iframe 
+                src="https://calendar.app.google/u8Hcn9ELe2SVJyDx6" 
+                style="border: 0" 
+                width="100%" 
+                height="700" 
+                frameborder="0" 
+                scrolling="no">
+            </iframe>
+        </div>
+        <div class="agenda-help">
+            <p>¿Prefieres agendar de forma personal o tienes dudas? <a href="https://wa.me/593987542217" class="admin-whatsapp" target="_blank">Escríbeme por WhatsApp</a></p>
         </div>
     </section>
 
@@ -328,17 +378,59 @@
                 <li><a href="#contacto">Contacto</a></li>
             </ul>
             <div class="footer-bottom">
-                <p> Psic. Josué Berrú Negrete. Todos los derechos reservados.</p>
+                <div class="social-links" style="margin-bottom: 1rem; display: flex; justify-content: center; gap: 1rem;">
+                    <a href="https://www.instagram.com/psicjosueberru/" target="_blank" aria-label="Instagram" style="color: white; opacity: 0.8; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    </a>
+                </div>
+                <p>&copy; 2026 Psic. Josué Berrú Negrete. Todos los derechos reservados.</p>
                 <p style="margin-top: 0.5rem; font-size: 0.85rem;">Psicólogo Clínico | Quito, Ecuador</p>
             </div>
         </div>
     </footer>
 
     <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/593987542217" target="_blank" class="whatsapp-float" aria-label="Contactar por WhatsApp">
+    <a href="https://wa.me/593987542217" class="admin-whatsapp" target="_blank" class="whatsapp-float" aria-label="Contactar por WhatsApp">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
     </a>
 
     <script type="module" src="./main.js"></script>
+
+    <script>
+      fetch('/api/config').then(r => r.json()).then(cfg => {
+        // Imágenes (perfil y logo)
+        const slots = cfg.imageSlots || []
+        const idMap = { profile: ['img-profile'], logo: ['img-logo', 'img-hero'] }
+        slots.forEach(slot => {
+          if (!slot.path) return
+          ;(idMap[slot.id] || []).forEach(id => { const el = document.getElementById(id); if (el) el.src = slot.path })
+        })
+
+        // Sección Recursos (título, descripción y tarjetas)
+        const res = cfg.resources
+        if (res) {
+          const t = document.getElementById('recursos-title')
+          const s = document.getElementById('recursos-subtitle')
+          if (t && res.title)    t.textContent = res.title
+          if (s && res.subtitle) s.textContent = res.subtitle
+          if (Array.isArray(res.cards) && res.cards.length > 0) {
+            const grid = document.getElementById('recursos-grid')
+            if (grid) {
+              grid.innerHTML = res.cards.map(card => `
+                <div class="service-card" style="padding:1.5rem">
+                  ${card.image ? `<img src="${card.image}" alt="${card.title}" style="border-radius:12px;margin-bottom:1.5rem;width:100%">` : ''}
+                  <h3 style="font-size:1.1rem">${card.title}</h3>
+                  ${card.description ? `<p>${card.description}</p>` : ''}
+                </div>`).join('')
+            }
+          }
+        }
+
+        // Contacto
+        const c = cfg.content || {}
+        if (c.phone)    document.querySelectorAll('.admin-phone').forEach(el => el.textContent = c.phone)
+        if (c.whatsapp) document.querySelectorAll('.admin-whatsapp').forEach(el => el.href = 'https://wa.me/' + c.whatsapp)
+      }).catch(() => {})
+    </script>
 </body>
 </html>
