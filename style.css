@@ -716,6 +716,12 @@ nav {
     font-weight: 500;
     font-size: 1.1rem;
     color: var(--color-text);
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    padding: 0;
 }
 
 .faq-question i {
