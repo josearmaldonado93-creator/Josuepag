@@ -1,5 +1,9 @@
-// Initialize Lucide icons
-lucide.createIcons();
+// Initialize Lucide icons (deferred — wait for script to load)
+function initLucide() {
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+document.addEventListener('DOMContentLoaded', initLucide);
+window.addEventListener('load', initLucide);
 
 // FAQ Toggle
 window.toggleFaq = function(element) {
