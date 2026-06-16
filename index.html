@@ -240,42 +240,49 @@
     <section id="ubicacion" class="location">
         <div class="location-content">
             <div class="location-info">
-                <h2>Centro de Atención en Quito</h2>
+                <h2>Lugares de Atención</h2>
                 <p>Atención presencial en instalaciones cómodas y accesibles, con la posibilidad de agendar sesiones online.</p>
                 
-                <div class="location-detail">
-                    <i data-lucide="map-pin" style="width:20px;height:20px;"></i>
-                    <div>
-                        <h4>Centro Médico Aliviamed</h4>
-                        <p>Av. Brasil y Pasaje Taborda N39-222, Quito, Ecuador</p>
-                    </div>
+                <div class="location-selector">
+                    <button class="location-tab active" onclick="switchLocation('aliviamed')">Centro Médico Aliviamed</button>
+                    <button class="location-tab" onclick="switchLocation('calma')">Calma Coworking</button>
                 </div>
                 
-                <div class="location-detail">
-                    <i data-lucide="clock" style="width:20px;height:20px;"></i>
-                    <div>
-                        <h4>Modalidades</h4>
-                        <p>Atención Presencial y Virtual (Online)</p>
+                <div id="location-info-dynamic" class="location-fade">
+                    <div class="location-detail">
+                        <i data-lucide="map-pin" style="width:20px;height:20px;"></i>
+                        <div>
+                            <h4 id="loc-name">Centro Médico Aliviamed</h4>
+                            <p id="loc-address">Av. Brasil y Pasaje Taborda N39-222, Quito, Ecuador</p>
+                        </div>
                     </div>
-                </div>
-
-                <div class="location-detail">
-                    <i data-lucide="phone" style="width:20px;height:20px;"></i>
-                    <div>
-                        <h4>Contacto Directo</h4>
-                        <p class="admin-phone">+593 987 542217</p>
+                    
+                    <div class="location-detail">
+                        <i data-lucide="clock" style="width:20px;height:20px;"></i>
+                        <div>
+                            <h4>Modalidades</h4>
+                            <p>Atención Presencial y Virtual (Online)</p>
+                        </div>
                     </div>
-                </div>
 
-                <a href="https://www.google.com/maps/search/?api=1&query=Av.+Brasil+y+Pasaje+Taborda+N39-222,+Quito,+Ecuador" target="_blank" rel="noopener noreferrer" class="btn-primary" style="margin-top: 1rem;">
-                    <i data-lucide="navigation" style="width:18px;height:18px;"></i>
-                    Ver en Google Maps
-                </a>
+                    <div class="location-detail">
+                        <i data-lucide="phone" style="width:20px;height:20px;"></i>
+                        <div>
+                            <h4>Contacto Directo</h4>
+                            <p class="admin-phone">+593 987 542217</p>
+                        </div>
+                    </div>
+
+                    <a id="loc-btn-link" href="https://www.google.com/maps/search/?api=1&query=Av.+Brasil+y+Pasaje+Taborda+N39-222,+Quito,+Ecuador" target="_blank" rel="noopener noreferrer" class="btn-primary" style="margin-top: 1rem;">
+                        <i data-lucide="navigation" style="width:18px;height:18px;"></i>
+                        Ver en Google Maps
+                    </a>
+                </div>
             </div>
-            <div class="map-container">
+            <div id="location-map-dynamic" class="map-container location-fade">
                 <i data-lucide="map" style="width:48px;height:48px;"></i>
                 <p>Mapa interactivo de Google Maps</p>
-                <a href="https://www.google.com/maps/search/?api=1&query=Av.+Brasil+y+Pasaje+Taborda+N39-222,+Quito,+Ecuador" target="_blank" rel="noopener noreferrer" class="map-link">
+                <a id="loc-map-link" href="https://www.google.com/maps/search/?api=1&query=Av.+Brasil+y+Pasaje+Taborda+N39-222,+Quito,+Ecuador" target="_blank" rel="noopener noreferrer" class="map-link">
                     Abrir ubicación <i data-lucide="external-link" style="width:16px;height:16px;"></i>
                 </a>
             </div>
@@ -480,6 +487,56 @@
         if (c.phone)    document.querySelectorAll('.admin-phone').forEach(el => el.textContent = c.phone)
         if (c.whatsapp) document.querySelectorAll('.admin-whatsapp').forEach(el => el.href = 'https://wa.me/' + c.whatsapp)
       }).catch(() => {})
+    </script>
+
+    <script>
+      const locations = {
+        aliviamed: {
+          name: 'Centro Médico Aliviamed',
+          address: 'Av. Brasil y Pasaje Taborda N39-222, Quito, Ecuador',
+          mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Av.+Brasil+y+Pasaje+Taborda+N39-222,+Quito,+Ecuador'
+        },
+        calma: {
+          name: 'Calma Coworking',
+          address: 'Francisco Pizarro y Sta. María N16-59, Quito, Ecuador',
+          mapsUrl: 'https://maps.app.goo.gl/bpcK8Yb1wu5A6YuC9'
+        }
+      };
+
+      window.switchLocation = function(key) {
+        const infoContainer = document.getElementById('location-info-dynamic');
+        const mapContainer = document.getElementById('location-map-dynamic');
+        if (!infoContainer || !mapContainer) return;
+
+        // Update active tab class
+        const tabs = document.querySelectorAll('.location-tab');
+        tabs.forEach(tab => {
+          if (tab.getAttribute('onclick').includes(key)) {
+            tab.classList.add('active');
+          } else {
+            tab.classList.remove('active');
+          }
+        });
+
+        // Add fade-out class
+        infoContainer.classList.add('fade-out');
+        mapContainer.classList.add('fade-out');
+
+        setTimeout(() => {
+          const loc = locations[key];
+          if (!loc) return;
+
+          // Update details
+          document.getElementById('loc-name').textContent = loc.name;
+          document.getElementById('loc-address').textContent = loc.address;
+          document.getElementById('loc-btn-link').href = loc.mapsUrl;
+          document.getElementById('loc-map-link').href = loc.mapsUrl;
+
+          // Remove fade-out class
+          infoContainer.classList.remove('fade-out');
+          mapContainer.classList.remove('fade-out');
+        }, 250);
+      };
     </script>
 </body>
 </html>

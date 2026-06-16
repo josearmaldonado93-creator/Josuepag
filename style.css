@@ -628,6 +628,48 @@ nav {
     align-items: center;
 }
 
+.location-selector {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.location-tab {
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.location-tab:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--color-white);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.location-tab.active {
+    background: var(--color-accent);
+    color: var(--color-white);
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 15px rgba(194, 112, 95, 0.3);
+}
+
+.location-fade {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.location-fade.fade-out {
+    opacity: 0;
+    transform: translateY(5px);
+}
+
 .location-info h2 {
     font-size: 2.5rem;
     margin-bottom: 1.5rem;
