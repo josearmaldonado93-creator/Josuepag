@@ -993,13 +993,7 @@ footer {
         gap: 2rem;
     }
     .hero-image {
-        padding: 2rem !important;
-        border-radius: 24px !important;
-        max-width: 280px;
-        margin: 0 auto;
-    }
-    #img-hero {
-        max-width: 150px !important;
+        display: none !important;
     }
 
     .hero h1 {
