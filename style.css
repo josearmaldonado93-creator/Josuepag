@@ -986,9 +986,20 @@ footer {
         margin: 0 auto 2rem auto;
     }
     .hero {
+        min-height: auto;
         flex-direction: column;
         text-align: center;
-        padding-top: 7rem;
+        padding: 8rem 1.5rem 3rem;
+        gap: 2rem;
+    }
+    .hero-image {
+        padding: 2rem !important;
+        border-radius: 24px !important;
+        max-width: 280px;
+        margin: 0 auto;
+    }
+    #img-hero {
+        max-width: 150px !important;
     }
 
     .hero h1 {
